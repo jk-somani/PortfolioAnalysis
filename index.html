@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Portfolio Analysis Platform | Indian Markets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-bg: #0f172a;
+            --light-bg: #1e293b;
+            --text-light: #e2e8f0;
+            --text-dark: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Process Steps */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+
+        .process-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .process-step:hover::before {
+            opacity: 0.1;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            border-color: var(--success);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* AI/ML Comparison */
+        .ai-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .comparison-side {
+            padding: 2rem;
+            border-radius: 1rem;
+            position: relative;
+        }
+
+        .traditional {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .ai-powered {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Benefits List */
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefits-list li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefits-list li:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateX(10px);
+        }
+
+        /* Challenges */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .challenge-card {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Broker Comparison */
+        .broker-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .broker-card {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .broker-header {
+            padding: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .zerodha-header {
+            background: linear-gradient(135deg, #0066cc, #004499);
+        }
+
+        .groww-header {
+            background: linear-gradient(135deg, #00d09c, #00a876);
+        }
+
+        .ai-broker-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+
+        .broker-content {
+            padding: 1.5rem;
+        }
+
+        .metric-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 1rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ai-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                font-size: 0.875rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Pulse Animation */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">🏠 Home</a></li>
+            <li><a href="#process">📊 Analysis Process</a></li>
+            <li><a href="#ai-difference">🤖 AI/ML Difference</a></li>
+            <li><a href="#broker-comparison">📈 Broker Comparison</a></li>
+            <li><a href="#applications">🚀 AI Applications</a></li>
+            <li><a href="#benefits">✨ Benefits & Challenges</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div>
+            <h1>AI-Powered Portfolio Analysis Platform</h1>
+            <p>Revolutionizing Investment Analysis for Indian Markets with Advanced Machine Learning</p>
+            <div class="feature-grid" style="max-width: 800px; margin: 3rem auto;">
+                <div class="feature-card pulse">
+                    <div class="feature-icon">📊</div>
+                    <h4>Real-time Analysis</h4>
+                </div>
+                <div class="feature-card pulse" style="animation-delay: 0.2s;">
+                    <div class="feature-icon">🤖</div>
+                    <h4>AI-Powered Insights</h4>
+                </div>
+                <div class="feature-card pulse" style="animation-delay: 0.4s;">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Predictive Analytics</h4>
+                </div>
+                <div class="feature-card pulse" style="animation-delay: 0.6s;">
+                    <div class="feature-icon">🛡️</div>
+                    <h4>Risk Management</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Analysis Process -->
+    <section id="process">
+        <h2 class="section-title">Portfolio Analysis Process - Indian Context</h2>
+        
+        <div class="card">
+            <h3>🎯 Comprehensive Analysis Framework</h3>
+            <p>Our sophisticated portfolio analysis process combines traditional financial theory with cutting-edge tools specifically optimized for Indian markets.</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="process-step fade-in">
+                <div class="step-number">1</div>
+                <h4>Data Collection & Integration</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ NSE/BSE real-time data feeds</li>
+                    <li>✓ Corporate actions tracking</li>
+                    <li>✓ Mutual fund NAV updates</li>
+                    <li>✓ Historical price data</li>
+                    <li>✓ Dividend & bonus history</li>
+                </ul>
+            </div>
+
+            <div class="process-step fade-in" style="animation-delay: 0.1s;">
+                <div class="step-number">2</div>
+                <h4>Performance Metrics</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ XIRR for SIP investments</li>
+                    <li>✓ CAGR calculations</li>
+                    <li>✓ Benchmark comparison (NIFTY/SENSEX)</li>
+                    <li>✓ Rolling returns analysis</li>
+                    <li>✓ Peer group ranking</li>
+                </ul>
+            </div>
+
+            <div class="process-step fade-in" style="animation-delay: 0.2s;">
+                <div class="step-number">3</div>
+                <h4>Risk Assessment</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ Volatility analysis</li>
+                    <li>✓ Value at Risk (VaR)</li>
+                    <li>✓ Beta calculation</li>
+                    <li>✓ Maximum drawdown</li>
+                    <li>✓ Concentration risk</li>
+                </ul>
+            </div>
+
+            <div class="process-step fade-in" style="animation-delay: 0.3s;">
+                <div class="step-number">4</div>
+                <h4>Risk-Adjusted Returns</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ Sharpe Ratio (using T-bill rates)</li>
+                    <li>✓ Sortino Ratio</li>
+                    <li>✓ Information Ratio</li>
+                    <li>✓ Treynor Ratio</li>
+                    <li>✓ Alpha generation</li>
+                </ul>
+            </div>
+
+            <div class="process-step fade-in" style="animation-delay: 0.4s;">
+                <div class="step-number">5</div>
+                <h4>Portfolio Optimization</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ Modern Portfolio Theory</li>
+                    <li>✓ Efficient frontier analysis</li>
+                    <li>✓ Asset allocation optimization</li>
+                    <li>✓ Sector diversification</li>
+                    <li>✓ Rebalancing recommendations</li>
+                </ul>
+            </div>
+
+            <div class="process-step fade-in" style="animation-delay: 0.5s;">
+                <div class="step-number">6</div>
+                <h4>Tax & Compliance</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ LTCG/STCG calculations</li>
+                    <li>✓ Tax harvesting opportunities</li>
+                    <li>✓ SEBI compliance check</li>
+                    <li>✓ Regulatory reporting</li>
+                    <li>✓ GST implications</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI/ML vs Traditional -->
+    <section id="ai-difference">
+        <h2 class="section-title">AI/ML vs Traditional Portfolio Analysis</h2>
+        
+        <div class="ai-comparison">
+            <div class="comparison-side traditional">
+                <h3 style="color: var(--warning);">🏛️ Traditional Approach</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0;">📊 Historical data analysis</li>
+                    <li style="padding: 0.5rem 0;">📈 Static risk models</li>
+                    <li style="padding: 0.5rem 0;">🔄 Periodic rebalancing</li>
+                    <li style="padding: 0.5rem 0;">👤 Manual pattern recognition</li>
+                    <li style="padding: 0.5rem 0;">📝 Rule-based strategies</li>
+                    <li style="padding: 0.5rem 0;">⏱️ Delayed insights</li>
+                    <li style="padding: 0.5rem 0;">📉 Limited scalability</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-side ai-powered">
+                <h3 style="color: var(--success);">🚀 AI/ML-Powered Approach</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0;">🧠 Predictive analytics</li>
+                    <li style="padding: 0.5rem 0;">🎯 Dynamic risk modeling</li>
+                    <li style="padding: 0.5rem 0;">⚡ Real-time optimization</li>
+                    <li style="padding: 0.5rem 0;">🔍 Deep pattern discovery</li>
+                    <li style="padding: 0.5rem 0;">🤖 Adaptive strategies</li>
+                    <li style="padding: 0.5rem 0;">💡 Instant insights</li>
+                    <li style="padding: 0.5rem 0;">📊 Infinite scalability</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔬 Advanced AI/ML Capabilities</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Neural Networks</h4>
+                    <p>Deep learning models for complex pattern recognition in market data</p>
+                </div>
+                <div class="feature-card">
+                    <h4>NLP Analysis</h4>
+                    <p>Sentiment analysis of news, social media, and earnings calls</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Reinforcement Learning</h4>
+                    <p>Self-improving algorithms that adapt to market conditions</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Ensemble Methods</h4>
+                    <p>Combining multiple models for robust predictions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Broker Comparison -->
+    <section id="broker-comparison">
+        <h2 class="section-title">Market Leaders vs AI-Enabled Analysis</h2>
+        
+        <div class="broker-cards">
+            <div class="broker-card">
+                <div class="broker-header zerodha-header">
+                    Zerodha Kite/Console
+                </div>
+                <div class="broker-content">
+                    <h4>Analysis Features:</h4>
+                    <div style="margin: 1rem 0;">
+                        <span class="metric-badge">P&L Reports</span>
+                        <span class="metric-badge">Holdings Analysis</span>
+                        <span class="metric-badge">Tax P&L</span>
+                        <span class="metric-badge">Trade Analytics</span>
+                        <span class="metric-badge">Basic Charts</span>
+                    </div>
+                    <h4 style="margin-top: 1rem;">Limitations:</h4>
+                    <ul style="padding-left: 1.5rem; color: var(--text-dark);">
+                        <li>No predictive analytics</li>
+                        <li>Limited risk metrics</li>
+                        <li>Manual rebalancing</li>
+                        <li>Basic portfolio optimization</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="broker-card">
+                <div class="broker-header groww-header">
+                    Groww Platform
+                </div>
+                <div class="broker-content">
+                    <h4>Analysis Features:</h4>
+                    <div style="margin: 1rem 0;">
+                        <span class="metric-badge">Investment Dashboard</span>
+                        <span class="metric-badge">Returns Calculator</span>
+                        <span class="metric-badge">Asset Allocation</span>
+                        <span class="metric-badge">Performance Tracking</span>
+                        <span class="metric-badge">Goal Planning</span>
+                    </div>
+                    <h4 style="margin-top: 1rem;">Limitations:</h4>
+                    <ul style="padding-left: 1.5rem; color: var(--text-dark);">
+                        <li>Simplified metrics only</li>
+                        <li>No advanced risk analysis</li>
+                        <li>Limited customization</li>
+                        <li>Basic reporting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="broker-card">
+                <div class="broker-header ai-broker-header">
+                    AI-Powered Platform
+                </div>
+                <div class="broker-content">
+                    <h4>Advanced Features:</h4>
+                    <div style="margin: 1rem 0;">
+                        <span class="metric-badge">Predictive Analytics</span>
+                        <span class="metric-badge">AI Risk Scoring</span>
+                        <span class="metric-badge">Auto-Rebalancing</span>
+                        <span class="metric-badge">Sentiment Analysis</span>
+                        <span class="metric-badge">Pattern Recognition</span>
+                        <span class="metric-badge">Custom AI Models</span>
+                        <span class="metric-badge">Real-time Optimization</span>
+                        <span class="metric-badge">Anomaly Detection</span>
+                    </div>
+                    <h4 style="margin-top: 1rem;">Advantages:</h4>
+                    <ul style="padding-left: 1.5rem; color: var(--success);">
+                        <li>24/7 market monitoring</li>
+                        <li>Predictive risk alerts</li>
+                        <li>Personalized strategies</li>
+                        <li>Advanced reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Zerodha</th>
+                        <th>Groww</th>
+                        <th>AI-Powered Platform</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Real-time Analysis</td>
+                        <td>Basic</td>
+                        <td>Basic</td>
+                        <td>Advanced with predictions</td>
+                    </tr>
+                    <tr>
+                        <td>Risk Management</td>
+                        <td>Standard metrics</td>
+                        <td>Simple indicators</td>
+                        <td>AI-driven risk scoring</td>
+                    </tr>
+                    <tr>
+                        <td>Portfolio Optimization</td>
+                        <td>Manual</td>
+                        <td>Suggestions only</td>
+                        <td>Automated with ML</td>
+                    </tr>
+                    <tr>
+                        <td>Market Insights</td>
+                        <td>News feed</td>
+                        <td>Basic research</td>
+                        <td>NLP-powered analysis</td>
+                    </tr>
+                    <tr>
+                        <td>Reporting</td>
+                        <td>Standard reports</td>
+                        <td>Basic dashboards</td>
+                        <td>Dynamic AI insights</td>
+                    </tr>
+                    <tr>
+                        <td>Personalization</td>
+                        <td>Limited</td>
+                        <td>Profile-based</td>
+                        <td>AI-learned preferences</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- AI/ML Applications -->
+    <section id="applications">
+        <h2 class="section-title">Key Applications of AI/ML in Portfolio Analysis</h2>
+        
+        <div class="card">
+            <h3>🧠 How AI/ML Works in Portfolio Management</h3>
+            <div class="process-grid">
+                <div class="process-step">
+                    <h4>1. Data Ingestion</h4>
+                    <p>Collecting vast amounts of structured and unstructured data from multiple sources including market feeds, news, social media, and economic indicators.</p>
+                </div>
+                <div class="process-step">
+                    <h4>2. Feature Engineering</h4>
+                    <p>Automatically extracting relevant features and creating new variables that capture complex market relationships and patterns.</p>
+                </div>
+                <div class="process-step">
+                    <h4>3. Model Training</h4>
+                    <p>Using historical data to train sophisticated models including neural networks, random forests, and gradient boosting machines.</p>
+                </div>
+                <div class="process-step">
+                    <h4>4. Prediction & Optimization</h4>
+                    <p>Generating predictions for returns, risks, and optimal portfolio allocations based on current market conditions.</p>
+                </div>
+                <div class="process-step">
+                    <h4>5. Continuous Learning</h4>
+                    <p>Models continuously update and improve based on new data and market feedback, adapting to changing conditions.</p>
+                </div>
+                <div class="process-step">
+                    <h4>6. Action & Monitoring</h4>
+                    <p>Executing recommended trades and continuously monitoring portfolio performance with real-time adjustments.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🚀 Core AI/ML Applications</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Price Prediction</h4>
+                    <p>LSTM networks for time-series forecasting of stock prices and market trends</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h4>Risk Prediction</h4>
+                    <p>Machine learning models to predict volatility and potential drawdowns</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Asset Selection</h4>
+                    <p>AI algorithms to identify optimal stocks based on fundamental and technical factors</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature
